@@ -1,0 +1,52 @@
+{
+  "name": "@metricspot/mcp-server",
+  "version": "0.1.0",
+  "description": "MetricSpot Model Context Protocol server. Exposes SEO + AI-readability audits to AI agents.",
+  "type": "module",
+  "main": "dist/server.js",
+  "bin": {
+    "mcp-server": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "bun --watch src/server.ts",
+    "dev:stdio": "bun --watch src/cli.ts",
+    "start": "bun src/server.ts",
+    "build": "bun build src/cli.ts --outfile dist/cli.js --target node --minify && bun build src/server.ts --outfile dist/server.js --target bun",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test src/",
+    "test:e2e": "playwright test"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "seo",
+    "audit",
+    "metricspot",
+    "ai-agents"
+  ],
+  "author": "MetricSpot",
+  "license": "MIT",
+  "homepage": "https://metricspot.com/AGENTS.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metricspot/mcp-server"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/bun": "latest",
+    "@types/node": "^22.10.2",
+    "bun-types": "latest",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
