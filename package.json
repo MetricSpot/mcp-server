@@ -1,6 +1,7 @@
 {
   "name": "@metricspot/mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "mcpName": "com.metricspot/seo-mcp",
   "description": "MetricSpot Model Context Protocol server. Exposes SEO + AI-readability audits to AI agents.",
   "type": "module",
   "main": "dist/server.js",

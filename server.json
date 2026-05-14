@@ -1,0 +1,45 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.metricspot/seo-mcp",
+  "description": "Six tools for SEO and AI-readability audits. 91 checks, 11 score modules.",
+  "websiteUrl": "https://metricspot.com/features/seo-mcp/",
+  "repository": {
+    "url": "https://github.com/MetricSpot/mcp-server",
+    "source": "github"
+  },
+  "version": "0.1.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@metricspot/mcp-server",
+      "version": "0.1.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "MCP_API_KEY",
+          "description": "Your MetricSpot API key (ms_live_...) from app.metricspot.com/settings/api-keys. Required for 5 of the 6 tools; omit to use only run_audit_anonymous (1 audit per IP per 24 hours, no auth).",
+          "isRequired": false,
+          "isSecret": true,
+          "format": "string"
+        }
+      ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.metricspot.com/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {api_key}",
+          "description": "Bearer token from app.metricspot.com/settings/api-keys. Required for 5 of the 6 tools; omit the header to use only run_audit_anonymous.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
