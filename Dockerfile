@@ -14,7 +14,7 @@ COPY package.json bun.lock* ./
 RUN bun install --frozen-lockfile --production || bun install --production
 
 COPY src ./src
-COPY tsconfig.json ./
+COPY tsconfig.json server.json ./
 
 ENV NODE_ENV=production
 ENV PORT=3000
