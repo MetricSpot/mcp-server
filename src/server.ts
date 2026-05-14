@@ -1,5 +1,7 @@
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { createMcpServer } from "./mcp-server.ts";
+import serverManifest from "../server.json" with { type: "json" };
+import pkg from "../package.json" with { type: "json" };
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -138,7 +140,16 @@ const handler = async (req: Request): Promise<Response> => {
   const url = new URL(req.url);
 
   if (url.pathname === "/health") {
-    return Response.json({ ok: true, name: "metricspot-mcp", version: "0.1.0" });
+    return Response.json({ ok: true, name: "metricspot-mcp", version: pkg.version });
+  }
+
+  if (url.pathname === "/.well-known/mcp-manifest") {
+    return Response.json(serverManifest, {
+      headers: {
+        "cache-control": "public, max-age=300",
+        "access-control-allow-origin": "*",
+      },
+    });
   }
 
   if (url.pathname === "/mcp") {
