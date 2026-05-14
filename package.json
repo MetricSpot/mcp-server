@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/server.js",
   "bin": {
-    "mcp-server": "./dist/cli.js"
+    "mcp-server": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -33,7 +33,7 @@
   "homepage": "https://metricspot.com/AGENTS.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/metricspot/mcp-server"
+    "url": "git+https://github.com/metricspot/mcp-server.git"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
