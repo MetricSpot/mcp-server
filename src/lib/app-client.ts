@@ -69,9 +69,7 @@ export class AppClient {
 }
 
 export function getAppClient(): AppClient {
-  const baseUrl =
-    process.env.APP_API_BASE_URL ??
-    (process.env.NODE_ENV === "production" ? "https://app.metricspot.com" : "http://localhost:3000");
+  const baseUrl = process.env.APP_API_BASE_URL ?? "https://app.metricspot.com";
   return new AppClient({
     baseUrl,
     internalToken: process.env.MCP_INTERNAL_TOKEN,
@@ -83,6 +81,6 @@ export function getReportBase(): string {
   return (
     process.env.APP_PUBLIC_BASE_URL ??
     process.env.APP_API_BASE_URL ??
-    (process.env.NODE_ENV === "production" ? "https://app.metricspot.com" : "http://localhost:3000")
+    "https://app.metricspot.com"
   );
 }

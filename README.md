@@ -54,7 +54,7 @@ Content-Type: application/json
 | Var | Default | Purpose |
 | --- | --- | --- |
 | `PORT` | `3000` | HTTP listen port |
-| `APP_API_BASE_URL` | `https://app.metricspot.com` (prod) / `http://localhost:3000` (dev) | MetricSpot app API base |
+| `APP_API_BASE_URL` | `https://app.metricspot.com` | MetricSpot app API base (the `dev`/`dev:stdio` scripts override it to `http://localhost:3000`) |
 | `APP_PUBLIC_BASE_URL` | falls back to `APP_API_BASE_URL` | Used to build `report_url` |
 | `MCP_INTERNAL_TOKEN` | — | Service-to-service secret forwarded as `X-MCP-Internal-Token` |
 | `MCP_API_KEY` | — | (stdio only) User API key, sent as `Authorization: Bearer` to the HTTP layer |

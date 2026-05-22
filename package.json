@@ -13,8 +13,8 @@
     "README.md"
   ],
   "scripts": {
-    "dev": "bun --watch src/server.ts",
-    "dev:stdio": "bun --watch src/cli.ts",
+    "dev": "APP_API_BASE_URL=http://localhost:3000 bun --watch src/server.ts",
+    "dev:stdio": "APP_API_BASE_URL=http://localhost:3000 bun --watch src/cli.ts",
     "start": "bun src/server.ts",
     "build": "bun build src/cli.ts --outfile dist/cli.js --target node --minify && bun build src/server.ts --outfile dist/server.js --target bun",
     "typecheck": "tsc --noEmit",
