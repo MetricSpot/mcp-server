@@ -25,26 +25,25 @@ export const getOrganicTrafficTool: ToolDefinition<typeof GetOrganicTrafficInput
     const ga4 = (payload.ga4 ?? {}) as Record<string, unknown>;
     const gsc = (payload.gsc ?? {}) as Record<string, unknown>;
 
-    const trend = Array.isArray(ga4.daily) ? ga4.daily : [];
-    const topLanding = Array.isArray(ga4.top_landing_pages) ? ga4.top_landing_pages : [];
+    // The app returns ga4.daily_sessions as a bare number[] (oldest first;
+    // reshapeGa4Daily drops the dates), top_pages as { path, sessions }, and
+    // the indexed-page count nested under gsc.indexing.pages_count_28d.
+    const trend = Array.isArray(ga4.daily_sessions) ? ga4.daily_sessions : [];
+    const topPages = Array.isArray(ga4.top_pages) ? ga4.top_pages : [];
     const topQueries = Array.isArray(gsc.top_queries) ? gsc.top_queries : [];
+    const indexing = (gsc.indexing ?? {}) as Record<string, unknown>;
 
     return McpOrganicTrafficResponse.parse({
       audit_id: input.audit_id,
       connected,
       sessions_28d: typeof ga4.sessions_28d === "number" ? ga4.sessions_28d : null,
-      sessions_trend: trend
-        .map((d) => ({
-          date: String((d as { date?: unknown }).date ?? ""),
-          sessions: Number((d as { sessions?: unknown }).sessions ?? 0),
-        }))
-        .filter((d) => d.date),
-      top_landing_pages: topLanding
+      sessions_trend: trend.map((n) => Number(n) || 0),
+      top_landing_pages: topPages
         .map((p) => ({
-          url: String((p as { url?: unknown }).url ?? ""),
+          path: String((p as { path?: unknown }).path ?? ""),
           sessions: Number((p as { sessions?: unknown }).sessions ?? 0),
         }))
-        .filter((p) => p.url),
+        .filter((p) => p.path),
       top_queries: topQueries
         .map((q) => ({
           query: String((q as { query?: unknown }).query ?? ""),
@@ -52,7 +51,7 @@ export const getOrganicTrafficTool: ToolDefinition<typeof GetOrganicTrafficInput
           impressions: Number((q as { impressions?: unknown }).impressions ?? 0),
         }))
         .filter((q) => q.query),
-      indexed_pages: typeof gsc.indexed_pages === "number" ? gsc.indexed_pages : null,
+      indexed_pages: typeof indexing.pages_count_28d === "number" ? indexing.pages_count_28d : null,
     });
   },
 };

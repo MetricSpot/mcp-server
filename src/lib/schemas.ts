@@ -89,7 +89,7 @@ export type McpPdfResponse = z.infer<typeof McpPdfResponse>;
 
 export const OrganicLanding = z
   .object({
-    url: z.string(),
+    path: z.string(),
     sessions: z.number(),
   })
   .strict();
@@ -107,7 +107,7 @@ export const McpOrganicTrafficResponse = z
     audit_id: z.string(),
     connected: z.boolean(),
     sessions_28d: z.number().nullable(),
-    sessions_trend: z.array(z.object({ date: z.string(), sessions: z.number() }).strict()).optional(),
+    sessions_trend: z.array(z.number()).optional(),
     top_landing_pages: z.array(OrganicLanding).optional(),
     top_queries: z.array(OrganicQuery).optional(),
     indexed_pages: z.number().nullable().optional(),

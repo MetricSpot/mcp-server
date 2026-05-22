@@ -230,31 +230,34 @@ describe("dispatch: authenticated tools", () => {
   });
 
   test("get_organic_traffic: populated payload normalizes daily/queries/landing", async () => {
+    // Payload shape mirrors what app.metricspot.com /api/audits/:id/google
+    // actually returns: ga4.daily_sessions is a bare number[], top_pages
+    // uses `path`, and the indexed-page count sits under gsc.indexing.
     setMockResponse({
       connected: true,
       ga4: {
         sessions_28d: 1234,
-        daily: [{ date: "2026-05-01", sessions: 50 }, { date: "2026-05-02", sessions: 75 }],
-        top_landing_pages: [{ url: "https://x.com/a", sessions: 200 }],
+        daily_sessions: [50, 75],
+        top_pages: [{ path: "/a", sessions: 200 }],
       },
       gsc: {
         top_queries: [{ query: "metricspot", clicks: 80, impressions: 1000 }],
-        indexed_pages: 42,
+        indexing: { pages_count_28d: 42 },
       },
     });
     const out = await toolsByName.get_organic_traffic!.handler({ audit_id: "42" }, ctx);
     const r = out as {
       connected: boolean;
       sessions_28d: number;
-      sessions_trend: Array<{ date: string }>;
-      top_landing_pages: Array<{ url: string }>;
+      sessions_trend: number[];
+      top_landing_pages: Array<{ path: string }>;
       top_queries: Array<{ query: string }>;
       indexed_pages: number;
     };
     expect(r.connected).toBe(true);
     expect(r.sessions_28d).toBe(1234);
-    expect(r.sessions_trend.length).toBe(2);
-    expect(r.top_landing_pages[0]!.url).toBe("https://x.com/a");
+    expect(r.sessions_trend).toEqual([50, 75]);
+    expect(r.top_landing_pages[0]!.path).toBe("/a");
     expect(r.top_queries[0]!.query).toBe("metricspot");
     expect(r.indexed_pages).toBe(42);
   });
