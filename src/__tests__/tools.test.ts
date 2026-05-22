@@ -261,6 +261,23 @@ describe("dispatch: authenticated tools", () => {
     expect(r.top_queries[0]!.query).toBe("metricspot");
     expect(r.indexed_pages).toBe(42);
   });
+
+  test("direct mode: with no MCP_INTERNAL_TOKEN, forwards the user key as Authorization: Bearer", async () => {
+    // This is the dashboard's copy-paste config — `npx` with only MCP_API_KEY,
+    // no infra secret. The app accepts `Authorization: Bearer ms_live_…`.
+    const saved = process.env.MCP_INTERNAL_TOKEN;
+    delete process.env.MCP_INTERNAL_TOKEN;
+    try {
+      setMockResponse({ audits: [] });
+      await toolsByName.list_audits!.handler({ limit: 5 }, ctx);
+      const req = lastRequest();
+      expect(req.headers["authorization"]).toBe("Bearer ms_live_aabbccddeeff00112233445566778899aabbccddeeff0011");
+      expect(req.headers["x-mcp-internal-token"]).toBeUndefined();
+      expect(req.headers["x-user-api-token"]).toBeUndefined();
+    } finally {
+      process.env.MCP_INTERNAL_TOKEN = saved;
+    }
+  });
 });
 
 describe("upstream errors propagate", () => {

@@ -30,8 +30,17 @@ export class AppClient {
       "Accept": "application/json",
       "User-Agent": this.config.userAgent,
     };
-    if (this.config.internalToken) headers["X-MCP-Internal-Token"] = this.config.internalToken;
-    if (opts.userApiToken) headers["X-User-Api-Token"] = opts.userApiToken;
+    // Two auth modes the app accepts. Gateway mode — hosted mcp.metricspot.com,
+    // which has the service-to-service token configured: X-MCP-Internal-Token
+    // plus X-User-Api-Token. Direct mode — a local stdio install that only
+    // carries the user's MCP_API_KEY and no infra secret: Authorization Bearer.
+    // Direct mode is what the dashboard's copy-paste config relies on.
+    if (this.config.internalToken) {
+      headers["X-MCP-Internal-Token"] = this.config.internalToken;
+      if (opts.userApiToken) headers["X-User-Api-Token"] = opts.userApiToken;
+    } else if (opts.userApiToken) {
+      headers["Authorization"] = `Bearer ${opts.userApiToken}`;
+    }
 
     let bodyStr: string | undefined;
     if (opts.body !== undefined) {
